@@ -1,0 +1,36 @@
+version: "3"
+
+services:
+  db:
+    container_name: db
+    image: "postgres:14.2"
+    environment:
+      POSTGRES_DB: mem_data
+      POSTGRES_USER: sami
+      POSTGRES_PASSWORD: admin123
+    volumes:
+      - "./config/sql/practice.sql:/docker-entrypoint-initdb.d/1.sql"
+
+  pgadmin:
+    container_name: pg_admin
+    image: "dpage/pgadmin4"
+    ports:
+      - "5050:80"
+    volumes:
+      - "./config/pgadmin.json:/pgadmin4/servers.json"
+    environment:
+      PGADMIN_DEFAULT_EMAIL: sami@sami.com
+      PGADMIN_DEFAULT_PASSWORD: admin123
+
+  db2:
+    container_name: db2
+    image: "postgres:14.2"
+    environment:
+      POSTGRES_DB: mem_data
+      POSTGRES_USER: sami
+      POSTGRES_PASSWORD: admin123
+    volumes:
+      - "./config/sql/create_stocktables.sql:/docker-entrypoint-initdb.d/1.sql"
+      - "./config/sql/import_stock.sql:/docker-entrypoint-initdb.d/2.sql"
+      - "./config/sql/stocknames.csv:/tmp/stocknames.csv"
+      - "./config/sql/dsf.csv:/tmp/dsf.csv"
